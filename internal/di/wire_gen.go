@@ -7,14 +7,14 @@ package di
 
 import (
 	"github.com/ajordi/todo/pkg/adding"
-	gorm2 "github.com/ajordi/todo/pkg/storage/gorm"
 	"github.com/jinzhu/gorm"
 )
 
 // Injectors from wire.go:
 
 func InitTaskAPI(db *gorm.DB) adding.TaskAPI {
-	taskRepository := gorm2.ProvideTaskRepository(db)
+	storage := New(db)
+	taskRepository := NewAddingTaskRepository(storage)
 	taskService := adding.ProvideTaskService(taskRepository)
 	taskAPI := adding.ProvideTaskAPI(taskService)
 	return taskAPI

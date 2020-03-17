@@ -1,12 +1,12 @@
 Generate wire_gen.go for dependency injection
 ```
-$ cd PROJECT_PATH/todo/internal
+$ cd internal/di
 $ wire
 ```
 
 Build the project
 ```
-$ cd PROJECT_PATH/cmd/server
+$ cd cmd/server
 $ go build main.go
 ```
 
