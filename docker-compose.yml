@@ -1,0 +1,41 @@
+version: '3.5'
+
+services:
+  # App Service
+  app:
+    # Configuration for building the docker image for the service
+#    build:
+#      context: . # Use an image built from the specified dockerfile in the current directory.
+#      dockerfile: Dockerfile
+    image: golang:1.14 # Uncomment for development
+    depends_on:
+      - mysql
+    environment: # Pass environment variables to the service
+      PORT: 8000
+      DB_URL: root:@tcp(mysql:3306)/platform?charset=utf8&parseTime=True&loc=Local
+    ports:
+      - "8000:8000" # Forward the exposed port 8000 on the container to port 8000 on the host machine
+    restart: unless-stopped
+    networks: # Networks to join (Services on the same network can communicate with each other using their name)
+      - backend
+# Uncomment for development
+    volumes:
+      - .:/go/src
+    working_dir: /go/src
+    command: go run cmd/server/main.go
+
+  # MySQL Service
+  mysql:
+    command: ["--default-authentication-plugin=mysql_native_password"]
+    environment:
+      - MYSQL_ROOT_PASSWORD=
+      - MYSQL_ALLOW_EMPTY_PASSWORD=yes
+    image: mysql:8
+    networks:
+      - backend
+    restart: unless-stopped
+    ports:
+      - "3360:3306"
+
+networks:
+  backend:
