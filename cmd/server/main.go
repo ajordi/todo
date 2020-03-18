@@ -27,7 +27,10 @@ func main(){
 	taskAPI := di.InitTaskAPI(db)
 
 	r := gin.Default()
-	r.POST("/tasks", taskAPI.Create)
+	r.POST("/tasks", taskAPI.Adding.Create)
+	r.GET("/tasks", taskAPI.Listing.FindAll)
+	r.GET("/tasks/:id", taskAPI.Listing.FindByID)
+	r.DELETE("/tasks/:id", taskAPI.Deleting.Delete)
 
 	err := r.Run()
 	if err != nil {

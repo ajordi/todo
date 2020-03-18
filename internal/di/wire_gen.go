@@ -6,16 +6,24 @@
 package di
 
 import (
+	"github.com/ajordi/todo/internal/api"
+	"github.com/ajordi/todo/internal/dao"
 	"github.com/ajordi/todo/pkg/adding"
+	"github.com/ajordi/todo/pkg/deleting"
+	"github.com/ajordi/todo/pkg/listing"
 	"github.com/jinzhu/gorm"
 )
 
 // Injectors from wire.go:
 
-func InitTaskAPI(db *gorm.DB) adding.TaskAPI {
-	storage := New(db)
-	taskRepository := NewAddingTaskRepository(storage)
+func InitTaskAPI(db *gorm.DB) *api.Api {
+	storage := dao.New(db)
+	taskRepository := dao.NewAddingTaskRepository(storage)
 	taskService := adding.ProvideTaskService(taskRepository)
-	taskAPI := adding.ProvideTaskAPI(taskService)
-	return taskAPI
+	listingTaskRepository := dao.NewListingTaskRepository(storage)
+	listingTaskService := listing.ProvideTaskService(listingTaskRepository)
+	deletingTaskRepository := dao.NewDeletingTaskRepository(storage)
+	deletingTaskService := deleting.ProvideTaskService(deletingTaskRepository)
+	apiApi := api.New(taskService, listingTaskService, deletingTaskService)
+	return apiApi
 }

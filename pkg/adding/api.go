@@ -10,10 +10,6 @@ type TaskAPI struct {
 	TaskService TaskService
 }
 
-func ProvideTaskAPI(p TaskService) TaskAPI {
-	return TaskAPI{TaskService: p}
-}
-
 func (p *TaskAPI) Create(c *gin.Context) {
 	var taskDTO TaskDTO
 	err := c.BindJSON(&taskDTO)

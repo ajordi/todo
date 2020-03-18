@@ -1,5 +1,5 @@
 package deleting
 
 type TaskRepository interface {
-	Delete(task Task)
+	Delete(id uint)
 }

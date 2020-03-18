@@ -31,6 +31,8 @@ func (t *Storage) Save(task adding.Task) adding.Task {
 	return task
 }
 
-func (t *Storage) Delete(task deleting.Task) {
+func (t *Storage) Delete(id uint) {
+	var task deleting.Task
+	t.GORM.First(&task, id)
 	t.GORM.Delete(&task)
 }
