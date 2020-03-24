@@ -21,6 +21,7 @@ Golang Gin CRUD RESTful with Go Modules, Wire, Gorm and MySQL built with Hexagon
 │   └── service
 └── pkg # Library code that's ok to use by external applications
     ├── adding # Adding context
+    ├── authenticating # Authenticating context
     ├── deleting # Deleting context
     ├── listing # Listing context
     └── storage # Persistance storage implementation
