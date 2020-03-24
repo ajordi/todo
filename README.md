@@ -27,7 +27,7 @@ Golang Gin CRUD RESTful with Go Modules, Wire, Gorm and MySQL built with Hexagon
         └── gorm # ORM Gorm
 ```
 
-Generate wire_gen.go for dependency injection
+Generate `wire_gen.go` for dependency injection
 
 ```
 $ cd internal/di
@@ -49,7 +49,6 @@ $ PORT=8000 DB_URL="root:@tcp(127.0.0.1:3360)/platform?charset=utf8&parseTime=Tr
 ## TODO
 
     - Add Template build environment. Check => https://github.com/thockin/go-build-template
-    - Add authentication
 
 ## References
 

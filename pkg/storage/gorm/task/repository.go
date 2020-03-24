@@ -1,4 +1,4 @@
-package gorm
+package task
 
 import (
 	"github.com/ajordi/todo/pkg/adding"

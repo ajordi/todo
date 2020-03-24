@@ -10,7 +10,7 @@ type TaskAPI struct {
 	TaskService TaskService
 }
 
-func (p *TaskAPI) Create(c *gin.Context) {
+func (t *TaskAPI) Create(c *gin.Context) {
 	var taskDTO TaskDTO
 	err := c.BindJSON(&taskDTO)
 	if err != nil {
@@ -19,7 +19,7 @@ func (p *TaskAPI) Create(c *gin.Context) {
 		return
 	}
 
-	createdTask := p.TaskService.Save(ToTask(taskDTO))
+	createdTask := t.TaskService.Save(ToTask(taskDTO))
 
 	c.JSON(http.StatusOK, gin.H{"task": ToTaskDTO(createdTask)})
 }

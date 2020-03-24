@@ -10,7 +10,7 @@ import (
 	"github.com/jinzhu/gorm"
 )
 
-func InitTaskAPI(db *gorm.DB) *api.Api {
+func InitApp(db *gorm.DB) *api.Api {
 	wire.Build(dao.ProviderDB, service.ProviderService, api.ProviderTaskAPI)
 	return &api.Api{}
 }

@@ -3,6 +3,7 @@ package main
 import (
 	"github.com/ajordi/todo/internal/di"
 	"github.com/ajordi/todo/pkg/adding"
+	"github.com/ajordi/todo/pkg/authenticating"
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
@@ -16,6 +17,7 @@ func initDB() *gorm.DB{
 	}
 
 	db.AutoMigrate(&adding.Task{})
+	db.AutoMigrate(&authenticating.User{})
 
 	return db
 }
@@ -24,16 +26,25 @@ func main(){
 	db := initDB()
 	defer db.Close()
 
-	taskAPI := di.InitTaskAPI(db)
+	app := di.InitApp(db)
+	apiV1prefix := "/api/v1"
 
 	r := gin.Default()
-	r.POST("/tasks", taskAPI.Adding.Create)
-	r.GET("/tasks", taskAPI.Listing.FindAll)
-	r.GET("/tasks/:id", taskAPI.Listing.FindByID)
-	r.DELETE("/tasks/:id", taskAPI.Deleting.Delete)
+	r.POST("/auth/login", app.AuthMiddleware.LoginHandler)
+	r.GET("/auth/refresh_token", app.AuthMiddleware.RefreshHandler)
+	r.POST(apiV1prefix + "/users", app.Authenticating.Create)
 
-	err := r.Run()
-	if err != nil {
-		panic(err)
+	auth := r.Group(apiV1prefix)
+	auth.Use(app.AuthMiddleware.MiddlewareFunc())
+	{
+		auth.POST("/tasks", app.Adding.Create)
+		auth.GET("/tasks", app.Listing.FindAll)
+		auth.GET("/tasks/:id", app.Listing.FindByID)
+		auth.DELETE("/tasks/:id", app.Deleting.Delete)
+	}
+
+	errR := r.Run()
+	if errR != nil {
+		panic(errR)
 	}
 }
